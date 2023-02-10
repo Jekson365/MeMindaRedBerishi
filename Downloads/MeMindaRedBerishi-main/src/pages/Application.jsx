@@ -11,6 +11,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Resume } from "./cv-page/Resume";
 import { useContext } from "react";
+import axios from "axios";
 
 export const userContext = createContext();
 
@@ -98,7 +99,7 @@ export const Application = () => {
     });
     const nm = event.target.name;
     const val = event.target.value;
-    if (nm == "name" || nm == "surname" || nm == 'post' || nm == 'emp') {
+    if (nm == "name" || nm == "surname" || nm == "post" || nm == "emp") {
       if (event.target.value.length <= 2) {
         setError("სიმბოლოები უნდა იყოს 2-ზე მეტი");
       } else {
@@ -119,9 +120,7 @@ export const Application = () => {
         setError("მხოლოდ ქართული ნომრები");
       }
     }
-    if (error == '') {
-      localStorage.setItem(event.target.name, event.target.value);
-    }
+    localStorage.setItem(event.target.name, event.target.value);
   };
   const handleImage = (event) => {
     setFormData({
@@ -132,6 +131,73 @@ export const Application = () => {
       event.target.name,
       URL.createObjectURL(event.target.files[0])
     );
+  };
+
+  const [userInformation, setUserInformation] = useState([]);
+  const sendData = async () => {
+    const savedName = localStorage.getItem("name");
+    const savedSurname = localStorage.getItem("surname");
+    const savedPhoto = localStorage.getItem("photo");
+    const savedAbout = localStorage.getItem("about");
+    const savedMail = localStorage.getItem("mail");
+    const savedMobile = localStorage.getItem("mobile");
+    const savedPost = localStorage.getItem("post");
+    const savedEmp = localStorage.getItem("emp");
+    const savedStartDate = localStorage.getItem("startdate");
+    const savedEndDate = localStorage.getItem("enddate");
+    const savedDegDec = localStorage.getItem("degdec");
+
+    const savedExpDesc = localStorage.getItem("expdesc");
+    const savedPlace = localStorage.getItem("place");
+    const savedDegEndDate = localStorage.getItem("degend");
+    const savedDeg = localStorage.getItem("degree");
+
+    const additionalExperience = JSON.parse(
+      localStorage.getItem("additionalexp")
+    );
+    const additionalEducation = JSON.parse(localStorage.getItem("additional"));
+    const data = {
+      name: savedName,
+      surname: savedSurname,
+      email: savedMail,
+      phone_number: savedMobile,
+      photo: savedPhoto,
+      about: savedAbout,
+      experiences: [
+        {
+          post: savedPost,
+          emp: savedEmp,
+          endDate: savedEndDate,
+          startDate: savedStartDate,
+          degDec: savedExpDesc,
+        },
+        additionalExperience,
+      ],
+      education: [
+        {
+          degDec: savedDegDec,
+          degree: savedDeg,
+          endDate: savedDegEndDate,
+          place: savedPlace,
+        },
+        additionalEducation,
+      ],
+    };
+
+    console.log(data);
+    try {
+      const res = await axios
+        .post("https://resume.redberryinternship.ge/api/cvs", data, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => console.log(res.status));
+
+        console.log(res)
+    } catch (err) {
+      console.log(err);
+    }
   };
   // states
   return (
@@ -166,9 +232,18 @@ export const Application = () => {
                   <div className={`button-prev ${page == 0 ? "o-0" : ""}`}>
                     <button onClick={() => setPage(page - 1)}>წინა</button>
                   </div>
-                  <div className={`button-prev ${page == 2 ? "o-0" : ""}`}>
+                  <div className={`button-prev ${page == 2 ? "d-none" : ""}`}>
                     <button onClick={() => setPage(page + 1)}>შემდეგი</button>
                   </div>
+                  {page == 2 ? (
+                    <>
+                      <div className="button-prev">
+                        <button onClick={sendData}>დასრულება</button>
+                      </div>
+                    </>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
             </div>

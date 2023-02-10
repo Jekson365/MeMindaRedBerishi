@@ -1,8 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
 import { userContext } from "../Application";
+import axios from "axios";
+export const Morefields = ({ data, handleInput }) => {
+  const { error } = useContext(userContext);
 
-export const Morefields = ({data,handleInput}) => {
-  const {error} = useContext(userContext)
+  const [degree, setDegree] = useState();
+  const getDegrees = async () => {
+    axios
+      .get("https://resume.redberryinternship.ge/api/degrees")
+      .then((res) => {
+        setDegree(res.data);
+      });
+  };
+  useEffect(() => {
+    getDegrees();
+  }, []);
   return (
     <div
       className="form-page mt-5 d-flex flex-column"
@@ -19,7 +31,7 @@ export const Morefields = ({data,handleInput}) => {
           className="form-control p-2"
           placeholder="სასწავლებელი"
         />
-        {error ? <ErrorMsg error={error}/> : ""}
+        {error ? <ErrorMsg error={error} /> : ""}
         <label htmlFor="" className="min">
           მინიმუმ 2 სიმბოლო
         </label>
@@ -38,10 +50,14 @@ export const Morefields = ({data,handleInput}) => {
             <option selected disabled hidden>
               აირჩიეთ ხარისხი
             </option>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
+            {degree &&
+              degree.map((each) => {
+                return (
+                  <>
+                    <option>{each.title}</option>
+                  </>
+                );
+              })}
           </select>
         </div>
         <div className="form-group col-md-6 ">

@@ -19,7 +19,10 @@ export const Resume = () => {
   return (
     <>
       <div className="gap"></div>
-      <div className="container" style={{ height: "100vh", maxWidth: "800px" }}>
+      <div
+        className="container"
+        style={{ height: "900px", maxWidth: "800px", overflowY: "scroll" }}
+      >
         <div className="container">
           <div className="row">
             <div className="col-md-8">
@@ -28,7 +31,11 @@ export const Resume = () => {
               </h1>
               <p className="p">{formData.mail}</p>
               <p className="p">{formData.mobile}</p>
-              <h3 className="h3 color-orange">ჩემს შესახებ</h3>
+              {formData.about ? (
+                <h3 className="h3 color-orange">ჩემს შესახებ</h3>
+              ) : (
+                ""
+              )}
               <p className="p mw-70">{formData.about}</p>
             </div>
             <div className="col-md-4">
@@ -45,27 +52,27 @@ export const Resume = () => {
         </div>
         <div className="gap"></div>
         <div className="container">
-          <h3 className="h3 color-orange">გამოცდილება</h3>
+          {formData ? <h3 className="h3 color-orange">გამოცდილება</h3> : ""}
           <p className="p">
-            {formData.post} - {formData.emp}
+            {formData.post} {formData.emp}
           </p>
           <div className="text-dark">
-            {formData.startDate} - {formData.endDate}
+            {formData.startDate} {formData.endDate}
           </div>
           <p className="mw-70">{formData.expDesc}</p>
         </div>
         {allExp &&
           allExp.map((each) => {
-            const {post,emp,startDate,endDate,degDec} = each
+            const { post, emp, startDate, endDate, degDec } = each;
             return (
               <>
                 <div className="container">
                   <h3 className="h3 color-orange">გამოცდილება</h3>
                   <p className="p">
-                    {post} - {emp}
+                    {post} {emp}
                   </p>
                   <div className="text-dark">
-                    {startDate} - {endDate}
+                    {startDate} {endDate}
                   </div>
                   <p className="mw-70">{degDec}</p>
                 </div>
@@ -77,7 +84,7 @@ export const Resume = () => {
         <div className="container">
           <h3 className="h3 color-orange">განათლება</h3>
           <p className="p ">
-            {formData.place} - {formData.degree}
+            {formData.place} {formData.degree}
           </p>
           <div className="text-dark">{formData.degEndDate}</div>
           <p className=" mw-70">{formData.degDec}</p>

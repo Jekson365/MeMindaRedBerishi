@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Morefields } from "../additional/Morefields";
 import { userContext } from "../Application";
 import ErrorMsg from "../additional/ErrorMsg";
+import axios from "axios";
 export const Education = () => {
   const { handleData, formData, allItem, setAllItem, error } =
     useContext(userContext);
@@ -55,7 +56,17 @@ export const Education = () => {
 
     localStorage.setItem("additional", JSON.stringify(additionalInfo));
   };
-
+  const [degree, setDegree] = useState();
+  const getDegrees = async () => {
+    axios
+      .get("https://resume.redberryinternship.ge/api/degrees")
+      .then((res) => {
+        setDegree(res.data);
+      });
+  };
+  useEffect(() => {
+    getDegrees();
+  }, []);
   return (
     <div>
       <div className="head d-flex w-100 align-items-center justify-content-between ">
@@ -94,10 +105,13 @@ export const Education = () => {
               <option selected disabled hidden>
                 აირჩიეთ ხარისხი
               </option>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
+              {degree && degree.map((each) => {
+                return (
+                  <>
+                    <option>{each.title}</option>
+                  </>
+                );
+              })}
             </select>
           </div>
           <div className="form-group col-md-6 ">

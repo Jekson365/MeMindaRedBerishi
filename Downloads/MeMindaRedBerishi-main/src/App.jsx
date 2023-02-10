@@ -5,6 +5,7 @@ import './main.scss'
 import { Application } from './pages/Application'
 import { Home } from './pages/Home'
 import { useContext } from 'react'
+import { Final } from './pages/application-page/Final'
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/application' element={<Application />} />
+          <Route path='/resume' element={<Final />} />
         </Routes>
       </BrowserRouter>
     </>
