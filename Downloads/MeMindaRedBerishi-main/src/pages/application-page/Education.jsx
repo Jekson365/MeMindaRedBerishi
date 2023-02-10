@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Morefields } from "../additional/Morefields";
 import { userContext } from "../Application";
+import ErrorMsg from "../additional/ErrorMsg";
 export const Education = () => {
-  const { handleData, formData, allItem, setAllItem } = useContext(userContext);
+  const { handleData, formData, allItem, setAllItem, error } =
+    useContext(userContext);
 
-  const [additionalInfo, setAdditionalInfo] = useState([])
+  const [additionalInfo, setAdditionalInfo] = useState([]);
   const [savedData, setSavedData] = useState(
     JSON.parse(localStorage.getItem("additional"))
   );
@@ -61,7 +63,7 @@ export const Education = () => {
         <div className="coubt">3/3</div>
       </div>
       <div
-        className="form-page mt-5 d-flex flex-column"
+        className="form-page mt-5 d-flex flex-column position-relative"
         style={{ gridGap: "10px" }}
       >
         <div className="form-row">
@@ -74,6 +76,7 @@ export const Education = () => {
             className="form-control p-2"
             placeholder="სასწავლებელი"
           />
+          {error ? <ErrorMsg error={error} /> : ""}
           <label htmlFor="" className="min">
             მინიმუმ 2 სიმბოლო
           </label>

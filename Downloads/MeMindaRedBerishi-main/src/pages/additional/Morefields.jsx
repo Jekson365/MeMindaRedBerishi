@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { userContext } from "../Application";
 
 export const Morefields = ({data,handleInput}) => {
+  const {error} = useContext(userContext)
   return (
     <div
       className="form-page mt-5 d-flex flex-column"
       style={{ gridGap: "10px" }}
     >
-      <div className="form-row">
+      <div className="form-row position-relative">
         <label htmlFor="">სასწავლებელი</label>
         <input
           name="place"
@@ -17,6 +19,7 @@ export const Morefields = ({data,handleInput}) => {
           className="form-control p-2"
           placeholder="სასწავლებელი"
         />
+        {error ? <ErrorMsg error={error}/> : ""}
         <label htmlFor="" className="min">
           მინიმუმ 2 სიმბოლო
         </label>

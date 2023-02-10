@@ -84,7 +84,11 @@ export const Application = () => {
     },
   ];
   const [page, setPage] = useState(0);
+  //error messages
 
+  const [error, setError] = useState("");
+
+  //error messages
   // states
 
   const handleData = (event) => {
@@ -92,7 +96,32 @@ export const Application = () => {
       ...formData,
       [event.target.name]: event.target.value,
     });
-    localStorage.setItem(event.target.name, event.target.value);
+    const nm = event.target.name;
+    const val = event.target.value;
+    if (nm == "name" || nm == "surname" || nm == 'post' || nm == 'emp') {
+      if (event.target.value.length <= 2) {
+        setError("სიმბოლოები უნდა იყოს 2-ზე მეტი");
+      } else {
+        setError("");
+      }
+    }
+    if (nm == "mail") {
+      if (!val.includes("@redberry.ge.com")) {
+        setError("ელ.ფოსტ უნდა მთავრდებოდეს @redberry.ge.com - ზე");
+      } else {
+        setError("");
+      }
+    }
+    if (nm == "mobile") {
+      if ((val.slice(0, 4) == "+995" && val.length == 4) || val.length == 13) {
+        setError("");
+      } else {
+        setError("მხოლოდ ქართული ნომრები");
+      }
+    }
+    if (error == '') {
+      localStorage.setItem(event.target.name, event.target.value);
+    }
   };
   const handleImage = (event) => {
     setFormData({
@@ -118,6 +147,8 @@ export const Application = () => {
               handleData,
               handleImage,
               setAllItem,
+              setError,
+              error,
             }}
           >
             <div className="col-md-7">
