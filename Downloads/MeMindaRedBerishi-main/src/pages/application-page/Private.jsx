@@ -6,6 +6,7 @@ import ErrorMsg from "../additional/ErrorMsg";
 export const Private = () => {
   const { handleData, handleImage, formData, error } = useContext(userContext);
 
+
   return (
     <>
       <div className="head d-flex w-100 align-items-center justify-content-between ">
@@ -24,7 +25,7 @@ export const Private = () => {
               name="name"
               value={formData.name}
             />
-            {error ? <ErrorMsg error={error}/> : ""}
+            {error ? <ErrorMsg error={error} /> : ""}
             <label htmlFor="" className="min ">
               მინიმუმ ორი ასო,ქართული ასოები
             </label>
@@ -105,4 +106,3 @@ export const Private = () => {
     </>
   );
 };
- 

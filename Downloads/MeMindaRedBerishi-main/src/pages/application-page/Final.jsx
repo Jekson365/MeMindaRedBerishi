@@ -34,8 +34,8 @@ export const Final = () => {
       surname: savedSurname,
       email: savedMail,
       phone_number: savedMobile,
-      photo: savedPhoto,
-      about: savedAbout,
+      image: savedPhoto,
+      about_me: savedAbout,
       experiences: [
         {
           post: savedPost,
@@ -44,16 +44,16 @@ export const Final = () => {
           startDate: savedStartDate,
           degDec: savedExpDesc,
         },
-        additionalExperience,
+        additionalExperience.map((each)=>each),
       ],
-      education: [
+      educations: [
         {
           degDec: savedDegDec,
           degree: savedDeg,
           endDate: savedDegEndDate,
           place: savedPlace,
         },
-        additionalEducation,
+        additionalEducation.map((each)=>each),
       ],
     };
   }

@@ -15,7 +15,7 @@ export const Education = () => {
   async function gt() {
     var dt = await JSON.parse(localStorage.getItem("additional"));
 
-    setAfterReload(dt);
+    setAfterReload(dt);h
   }
 
   const addNewFields = () => {

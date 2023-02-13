@@ -121,18 +121,19 @@ export const Application = () => {
       }
     }
     localStorage.setItem(event.target.name, event.target.value);
+
   };
   const handleImage = (event) => {
     setFormData({
       ...formData,
-      [event.target.name]: URL.createObjectURL(event.target.files[0]),
+      [event.target.name]: String(URL.createObjectURL(event.target.files[0])),
     });
     localStorage.setItem(
       event.target.name,
       URL.createObjectURL(event.target.files[0])
     );
-  };
 
+  }
   const [userInformation, setUserInformation] = useState([]);
   const sendData = async () => {
     const savedName = localStorage.getItem("name");
@@ -161,8 +162,8 @@ export const Application = () => {
       surname: savedSurname,
       email: savedMail,
       phone_number: savedMobile,
-      photo: savedPhoto,
-      about: savedAbout,
+      image: savedPhoto,
+      about_me: savedAbout,
       experiences: [
         {
           post: savedPost,
@@ -173,7 +174,7 @@ export const Application = () => {
         },
         additionalExperience,
       ],
-      education: [
+      educations: [
         {
           degDec: savedDegDec,
           degree: savedDeg,
@@ -185,78 +186,103 @@ export const Application = () => {
     };
 
     console.log(data);
-    try {
-      const res = await axios
-        .post("https://resume.redberryinternship.ge/api/cvs", data, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then((res) => console.log(res.status));
 
-        console.log(res)
-    } catch (err) {
-      console.log(err);
+    const config = {
+      method: "post",
+      url: "https://resume.redberryinternship.ge/api/cvs",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        "name": "დავით",
+        "surname": "ონიანი",
+        "email": "davitoniani@redberry.ge",
+        "phone_number": "+995598123456",
+        "experiences": [
+          {
+            "position": "back-end developer",
+            "employer": "Redberry",
+            "start_date": "2019/09/09",
+            "due_date": "2020/09/23",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ornare nunc dui, a pellentesque magna blandit dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum mattis diam nisi, at venenatis dolor aliquet vel. Pellentesque aliquet leo nec tortor pharetra, ac consectetur orci bibendum."
+          }
+        ],
+        "educations": [
+          {
+            "institute": "თსუ",
+            "degree": "სტუდენტი",
+            "due_date": "2017/06/25",
+            "description": "სამართლის ფაკულტეტის მიზანი იყო მიგვეღო ფართო თეორიული ცოდნა სამართლის არსის, სისტემის, ძირითადი პრინციპების, სამართლებრივი სისტემების, ქართული სამართლის ისტორიული წყაროების, კერძო, სისხლის და საჯარო სამართლის სფეროების ძირითადი თეორიების, პრინციპებისა და რეგულირების თავისებურებების შესახებ."
+          }
+        ],
+        "image":data.image,
+      }
     }
-  };
-  // states
-  return (
-    <>
-      <div
-        className="continer-fluid"
-        style={{ eight: "100vh", background: "rgba(240,240,240)" }}
-      >
-        <div className="row h-100">
-          <userContext.Provider
-            value={{
-              formData,
-              handleData,
-              handleImage,
-              setAllItem,
-              setError,
-              error,
-            }}
-          >
-            <div className="col-md-7">
-              <div
-                className="all p-5 d-flex flex-column justify-content-between"
-                style={{
-                  maxWidth: "760px",
-                  margin: "0 auto",
-                  "overflow-y": "scroll",
-                  height: "900px",
-                }}
-              >
-                <DisplayPage singlePage={panels[page].elemnt} />
-                <div className="buttons-con d-flex justify-content-between  w-100 p-5">
-                  <div className={`button-prev ${page == 0 ? "o-0" : ""}`}>
-                    <button onClick={() => setPage(page - 1)}>წინა</button>
+    try {
+        axios(config)
+        .then((res) => { console.log(res) })
+      } catch(err) {
+        console.log(err);
+      }
+    };
+    // states
+    return (
+      <>
+        <div
+          className="continer-fluid"
+          style={{ eight: "100vh", background: "rgba(240,240,240)" }}
+        >
+          <div className="row h-100">
+            <userContext.Provider
+              value={{
+                formData,
+                handleData,
+                handleImage,
+                setAllItem,
+                setError,
+                error,
+              }}
+            >
+              <div className="col-md-7">
+                <div
+                  className="all p-5 d-flex flex-column justify-content-between"
+                  style={{
+                    maxWidth: "760px",
+                    margin: "0 auto",
+                    "overflow-y": "scroll",
+                    height: "900px",
+                  }}
+                >
+                  <DisplayPage singlePage={panels[page].elemnt} />
+                  <div className="buttons-con d-flex justify-content-between  w-100 p-5">
+                    <div className={`button-prev ${page == 0 ? "o-0" : ""}`}>
+                      <button onClick={() => setPage(page - 1)}>წინა</button>
+                    </div>
+                    <div className={`button-prev ${page == 2 ? "d-none" : ""}`}>
+                      <button onClick={() => setPage(page + 1)}>შემდეგი</button>
+                    </div>
+                    {page == 2 ? (
+                      <>
+                        <div className="button-prev">
+                          <button onClick={sendData}>დასრულება</button>
+                        </div>
+                      </>
+                    ) : (
+                      ""
+                    )}
                   </div>
-                  <div className={`button-prev ${page == 2 ? "d-none" : ""}`}>
-                    <button onClick={() => setPage(page + 1)}>შემდეგი</button>
-                  </div>
-                  {page == 2 ? (
-                    <>
-                      <div className="button-prev">
-                        <button onClick={sendData}>დასრულება</button>
-                      </div>
-                    </>
-                  ) : (
-                    ""
-                  )}
                 </div>
               </div>
-            </div>
-            <div className="col-md-5 " style={{ background: "white" }}>
-              <Resume />
-            </div>
-          </userContext.Provider>
+              <div className="col-md-5 " style={{ background: "white" }}>
+                <Resume />
+              </div>
+            </userContext.Provider>
+          </div>
         </div>
-      </div>
-    </>
-  );
-};
+      </>
+    );
+  };
 
-function DisplayPage({ singlePage }) {
-  return <>{singlePage}</>;
-}
+  function DisplayPage({ singlePage }) {
+    return <>{singlePage}</>;
+  }
