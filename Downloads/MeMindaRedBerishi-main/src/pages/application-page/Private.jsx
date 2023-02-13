@@ -51,6 +51,7 @@ export const Private = () => {
             <input
               onChange={handleImage}
               name="photo"
+              accept="image/*"
               file={formData.photo}
               type="file"
               placeholder="ატვირთვა"

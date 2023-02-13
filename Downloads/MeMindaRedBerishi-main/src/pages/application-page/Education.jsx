@@ -27,6 +27,7 @@ export const Education = () => {
         degree: "",
         endDate: "",
         degDec: "",
+        degreeID:""
       },
     ]);
   };
@@ -42,6 +43,8 @@ export const Education = () => {
 
         if (targetName == "degree") {
           each.degree = targetValue;
+          each.degreeID = e.target.options.selectedIndex
+
         }
 
         if (targetName == "enddate") {
@@ -51,6 +54,7 @@ export const Education = () => {
         if (targetName == "degdec") {
           each.degDec = targetValue;
         }
+     
       }
     });
 
@@ -101,14 +105,15 @@ export const Education = () => {
               value={formData.degree}
               class="form-select p-2"
               placeholder="აირჩიეთ ხარისხი"
+               
             >
-              <option selected disabled hidden>
+              <option selected disabled hidden >
                 აირჩიეთ ხარისხი
               </option>
               {degree && degree.map((each) => {
                 return (
                   <>
-                    <option>{each.title}</option>
+                    <option id={each.id}>{each.title}</option>
                   </>
                 );
               })}

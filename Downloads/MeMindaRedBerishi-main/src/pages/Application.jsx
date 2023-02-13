@@ -33,6 +33,7 @@ export const Application = () => {
     degree: "",
     degEndDate: "",
     degDec: "",
+    degreeID:""
   });
   const test = new RegExp("/^[ა-ჰ]+$/g");
   setInterval(() => {
@@ -44,6 +45,7 @@ export const Application = () => {
     const savedMobile = localStorage.getItem("mobile");
     const savedPost = localStorage.getItem("post");
     const savedEmp = localStorage.getItem("emp");
+    const savedDegreeId = localStorage.getItem("degid")
     const savedStartDate = localStorage.getItem("startdate");
     const savedEndDate = localStorage.getItem("enddate");
     const savedExpDesc = localStorage.getItem("expdesc");
@@ -61,6 +63,7 @@ export const Application = () => {
       mobile: savedMobile || "",
       post: savedPost || "",
       emp: savedEmp || "",
+      degreeID:savedDegreeId || "",
       startDate: savedStartDate || "",
       endDate: savedEndDate || "",
       expDesc: savedExpDesc || "",
@@ -120,21 +123,34 @@ export const Application = () => {
         setError("მხოლოდ ქართული ნომრები");
       }
     }
-    localStorage.setItem(event.target.name, event.target.value);
+    if (event.target.name == 'degree') {
+      localStorage.setItem('degid',event.target.options.selectedIndex)
+    }
+    localStorage.setItem(event.target.name, event.target.value);  
+
+ 
 
   };
+  const [im,setImage] = useState()
+
   const handleImage = (event) => {
     setFormData({
       ...formData,
-      [event.target.name]: String(URL.createObjectURL(event.target.files[0])),
+      [event.target.name]: event.target.files[0].name,
     });
     localStorage.setItem(
       event.target.name,
       URL.createObjectURL(event.target.files[0])
     );
 
+    // setImage(event.target.files[0].name)
+
+    console.log(event.target.files)
+    setImage(event.target.value)
+
   }
   const [userInformation, setUserInformation] = useState([]);
+
   const sendData = async () => {
     const savedName = localStorage.getItem("name");
     const savedSurname = localStorage.getItem("surname");
@@ -148,6 +164,8 @@ export const Application = () => {
     const savedEndDate = localStorage.getItem("enddate");
     const savedDegDec = localStorage.getItem("degdec");
 
+    const savedDegreeId = localStorage.getItem("degid");
+    
     const savedExpDesc = localStorage.getItem("expdesc");
     const savedPlace = localStorage.getItem("place");
     const savedDegEndDate = localStorage.getItem("degend");
@@ -156,7 +174,9 @@ export const Application = () => {
     const additionalExperience = JSON.parse(
       localStorage.getItem("additionalexp")
     );
+
     const additionalEducation = JSON.parse(localStorage.getItem("additional"));
+
     const data = {
       name: savedName,
       surname: savedSurname,
@@ -164,6 +184,7 @@ export const Application = () => {
       phone_number: savedMobile,
       image: savedPhoto,
       about_me: savedAbout,
+      degree_id:savedDegreeId,
       experiences: [
         {
           post: savedPost,
@@ -184,14 +205,11 @@ export const Application = () => {
         additionalEducation,
       ],
     };
-
-    console.log(data);
-
     const config = {
       method: "post",
       url: "https://resume.redberryinternship.ge/api/cvs",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
       },
       data: {
         "name": "დავით",
@@ -204,18 +222,20 @@ export const Application = () => {
             "employer": "Redberry",
             "start_date": "2019/09/09",
             "due_date": "2020/09/23",
+            "degree_id": Math.random() * 10000,
             "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ornare nunc dui, a pellentesque magna blandit dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum mattis diam nisi, at venenatis dolor aliquet vel. Pellentesque aliquet leo nec tortor pharetra, ac consectetur orci bibendum."
           }
         ],
         "educations": [
           {
             "institute": "თსუ",
+            "degree_id": savedDegreeId,
             "degree": "სტუდენტი",
             "due_date": "2017/06/25",
             "description": "სამართლის ფაკულტეტის მიზანი იყო მიგვეღო ფართო თეორიული ცოდნა სამართლის არსის, სისტემის, ძირითადი პრინციპების, სამართლებრივი სისტემების, ქართული სამართლის ისტორიული წყაროების, კერძო, სისხლის და საჯარო სამართლის სფეროების ძირითადი თეორიების, პრინციპებისა და რეგულირების თავისებურებების შესახებ."
           }
         ],
-        "image":data.image,
+        "image":savedPhoto,
       }
     }
     try {
